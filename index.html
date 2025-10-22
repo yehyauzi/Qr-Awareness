@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Awareness Campaign</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0e0e0e;
+      color: #eaeaea;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .card {
+      background-color: #1b1b1b;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      max-width: 600px;
+      margin: 0 auto;
+      transition: all 0.3s ease-in-out;
+    }
+    h1 {
+      color: #00ffcc;
+      font-size: 1.8em;
+    }
+    .meta {
+      margin-top: 8px;
+      font-size: 0.98em;
+      color: #bdbdbd;
+    }
+    p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+    .hidden { display: none; }
+    button {
+      background-color: #00ffcc;
+      color: #0e0e0e;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 25px;
+      font-size: 1em;
+    }
+    button:hover { background-color: #00e6b8; }
+    a {
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover { text-decoration: underline; }
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="page1">
+    <h1>Loading Secure Page...</h1>
+    <div class="meta">Event: Monday, October 27, 10:00–12:00</div>
+    <p>Please wait while we verify your device’s authenticity.</p>
+    <button onclick="reveal()">Continue</button>
+  </div>
+
+  <div class="card hidden" id="page2">
+    <h1>⚠️ You’ve Just Been Quished!</h1>
+    <div class="meta">Cybersecurity Awareness Demo — Mon, Oct 27 · 10:00–12:00</div>
+    <p>
+      This QR code was part of the <strong>Cybersecurity Awareness Campaign</strong> by the LIU Cybersecurity Club.
+    </p>
+    <p>
+      Imagine if this page had been <strong>malicious</strong> — it could have:
+      <br>🔹 Stolen your credentials<br>
+      🔹 Installed malware<br>
+      🔹 Spoofed a trusted login page
+    </p>
+    <p>
+      <strong>Lesson:</strong> Always verify the URL before scanning a QR code.<br>
+      Stay alert. Stay secure. 🧠🔒
+    </p>
+    <p>
+      Want to learn more about cybersecurity?<br>
+      <a href="https://forms.gle/oU3hHJEYnskKFpbw7" target="_blank">
+        Join the LIU Cybersecurity Club
+      </a>
+    </p>
+  </div>
+
+  <footer>
+    © 2025 LIU Cybersecurity Club — Awareness Week · Monday, October 27 · 10:00–12:00
+  </footer>
+
+  <script>
+    function reveal() {
+      document.getElementById("page1").classList.add("hidden");
+      document.getElementById("page2").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
