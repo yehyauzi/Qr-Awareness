@@ -4,104 +4,160 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0e0e0e" />
-  <title>QR Awareness Campaign</title>
+  <title>QR Awareness – Quishing Demo</title>
   <style>
     :root{
-      --bg:#0e0e0e; --card:#171717; --text:#eaeaea; --muted:#bdbdbd; --accent:#00ffcc;
-      --radius:16px; --shadow:0 6px 24px rgba(0,0,0,.35);
+      --bg:#0b0b0b; --card:#141414; --text:#e9e9e9; --muted:#b7b7b7;
+      --accent:#00ffc8; --danger:#ff3b3b; --warn:#ffcf33;
+      --radius:16px; --shadow:0 8px 30px rgba(0,0,0,.45);
     }
-    /* Mobile-first layout */
     html,body{height:100%; background:var(--bg); color:var(--text);}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      display:flex; align-items:center; justify-content:center;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      display:flex; justify-content:center; align-items:center;
       padding: max(20px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
-      line-height:1.5;
+      line-height:1.55;
     }
-    .wrap{
-      width:100%; max-width:520px;
+    /* --- EVENT STRIP --- */
+    .event-bar{
+      position: fixed; top:0; left:0; right:0; z-index: 10;
+      background: linear-gradient(90deg, #1d1d1d, #101010);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color:#fff; padding: 10px 14px;
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; letter-spacing:.3px;
     }
+    .event-dot{
+      width:10px; height:10px; border-radius:50%;
+      background: var(--warn);
+      box-shadow: 0 0 0 6px rgba(255,207,51,0.08);
+      animation: glow 1.8s ease-in-out infinite;
+    }
+    .event-text{ font-size: clamp(.95rem, 3.6vw, 1.05rem); }
+    @keyframes glow{
+      0%,100%{ box-shadow: 0 0 0 6px rgba(255,207,51,0.08); }
+      50%{ box-shadow: 0 0 0 14px rgba(255,207,51,0.00); }
+    }
+
+    .wrap{width:100%; max-width:640px; margin-top: 54px;}
     .card{
       background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
       padding: clamp(20px, 5vw, 28px);
-      text-align:center;
+      text-align:left;
     }
-    h1{
-      font-size: clamp(1.25rem, 4.5vw, 1.75rem);
-      margin:0 0 8px; color:var(--accent);
+    /* warning ribbon */
+    .ribbon{
+      display:inline-block;
+      background: linear-gradient(90deg, var(--danger), #b80000);
+      color:#fff; font-weight:800; letter-spacing:.5px;
+      padding:8px 12px; border-radius:10px;
+      box-shadow:0 6px 24px rgba(255,30,30,.3);
+      margin:0 0 12px 0;
+      animation:pulse 1.6s ease-in-out infinite;
     }
-    .meta{
-      color:var(--muted); font-size: clamp(.9rem, 3.5vw, 1rem); margin-bottom: 8px;
-    }
-    p{font-size: clamp(1rem, 3.8vw, 1.05rem); margin: 12px 0;}
-    .hidden{display:none;}
-    .btn{
-      display:block; width:100%;
-      margin-top:16px; padding:14px 18px;
-      border:0; border-radius:12px; font-weight:700; font-size:1rem;
-      background:var(--accent); color:#081a16;
-      touch-action:manipulation; cursor:pointer;
-    }
-    .btn:active{transform: scale(.995);}
-    a{color:var(--accent); text-decoration:none; font-weight:700;}
-    a:focus-visible, .btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.35)}50%{box-shadow:0 0 0 10px rgba(255,59,59,0)}}
+    @media (prefers-reduced-motion: reduce){ .ribbon{animation:none} }
 
-    footer{
-      margin-top:12px; text-align:center; color:var(--muted);
-      font-size: .92rem;
+    .event-badge{
+      display:inline-flex; align-items:center; gap:10px;
+      background: rgba(255,207,51,.08);
+      border:1px solid rgba(255,207,51,.35);
+      color:#ffd66e;
+      padding:10px 12px; border-radius:12px; margin: 4px 0 14px;
+      font-weight:800;
+    }
+    .badge-icon{
+      width:18px; height:18px; border:2px solid #ffd66e; border-radius:6px; position:relative;
+    }
+    .badge-icon::after{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:10px; height:2px; background:#ffd66e; border-radius:2px;
     }
 
-    /* nice entrance without motion sickness */
-    .fade-in{opacity:0; transform: translateY(6px); animation:fade .35s ease forwards;}
-    @keyframes fade{to{opacity:1; transform:none;}}
-    @media (prefers-reduced-motion: reduce){
-      .fade-in{animation:none; opacity:1; transform:none;}
+    h1{ margin:6px 0 6px; font-size: clamp(1.35rem, 5vw, 1.95rem); color:var(--text); }
+    .meta{ color:var(--muted); font-size: clamp(.95rem, 3.5vw, 1rem); margin: 0 0 14px; }
+    p{ margin: 10px 0; font-size: clamp(1rem, 3.6vw, 1.06rem); }
+    ul,ol{ margin:10px 0 0 20px; padding:0; }
+    li{ margin:6px 0; }
+    .callout{
+      border:1px solid rgba(255,59,59,.35);
+      background: rgba(255,59,59,.07);
+      padding:12px 14px; border-radius:12px; margin:12px 0;
     }
+    .tip{
+      border:1px solid rgba(0,255,200,.25);
+      background: rgba(0,255,200,.06);
+      padding:12px 14px; border-radius:12px; margin:12px 0;
+    }
+    .cta{
+      display:inline-block; margin-top:14px;
+      padding:12px 16px; border-radius:12px; font-weight:800;
+      background:var(--accent); color:#08221b; text-decoration:none;
+    }
+    .cta:active{ transform:scale(.995) }
+    footer{ margin-top:12px; color:var(--muted); font-size:.92rem; text-align:left; }
   </style>
 </head>
 <body>
+  <div class="event-bar" role="status" aria-live="polite">
+    <span class="event-dot" aria-hidden="true"></span>
+    <span class="event-text">Cybersecurity Awareness Event — <strong>Monday, October 27</strong> · <strong>10:00–12:00</strong></span>
+  </div>
+
   <main class="wrap">
-    <!-- Screen 1 -->
-    <section class="card fade-in" id="page1" aria-labelledby="t1">
-      <h1 id="t1">Loading Secure Page…</h1>
-      <div class="meta">Event: Monday, October 27 · 10:00–12:00</div>
-      <p>Please wait while we verify your device’s authenticity.</p>
-      <button class="btn" onclick="reveal()" aria-controls="page2" aria-expanded="false">
-        Continue
-      </button>
-    </section>
+    <section class="card">
+      <div class="ribbon" aria-hidden="true">WARNING</div>
 
-    <!-- Screen 2 -->
-    <section class="card hidden fade-in" id="page2" aria-labelledby="t2">
-      <h1 id="t2">⚠️ You’ve Just Been Quished!</h1>
-      <div class="meta">Cybersecurity Awareness Demo — Mon, Oct 27 · 10:00–12:00</div>
-      <p>
-        This QR code is part of the <strong>LIU Cybersecurity Club</strong> awareness campaign.
-      </p>
-      <p>
-        If this were malicious, it could have:<br>
-        • Stolen your credentials<br>
-        • Installed malware<br>
-        • Spoofed a trusted login page
-      </p>
-      <p><strong>Tip:</strong> Always preview and verify the URL behind a QR before proceeding.</p>
-      <p>
-        Want more? <a href="https://forms.gle/your-registration-link-here" target="_blank" rel="noopener">
-        Join the LIU Cybersecurity Club</a>
-      </p>
-    </section>
+      <div class="event-badge" aria-label="Event time">
+        <span class="badge-icon" aria-hidden="true"></span>
+        <span>Mon, Oct 27 · 10:00–12:00</span>
+      </div>
 
-    <footer>© 2025 LIU Cybersecurity Club · Monday, October 27 · 10:00–12:00</footer>
+      <h1 style="color: #b80000;">You scanned a QR code without verifying the URL.</h1>
+      <h1 style="color: #b80000;">YOU COULD'VE GOT HACKED.</h1>
+      <p style="font-weight:700; color:#ffd66e; font-size:1.1rem;">
+        Come to the <strong>Cybersecurity Awareness Workshop</strong> —  
+        learn how to stop this from happening again.
+      </p>
+
+      <div class="meta">
+        This is an educational quishing (QR-phishing) demo by the LIU Cybersecurity Club.
+      </div>
+
+      <div class="callout">
+        <strong>Controlled demonstration.</strong><br />
+        If this were real, you could be redirected to a fake login, pushed to download malware,
+        or tricked into handing over your credentials.
+      </div>
+
+      <p><strong>What attackers count on:</strong></p>
+      <ul>
+        <li>Blind trust in stickers, posters, or table placards.</li>
+        <li>No preview of the destination link before tapping.</li>
+        <li>Signing in on a page that only <em>looks</em> legitimate.</li>
+      </ul>
+
+      <div class="tip">
+        <strong>Protect yourself next time</strong>
+        <ol>
+          <li><strong>Preview the URL</strong> (camera shows it) and read the full domain carefully.</li>
+          <li><strong>Watch for typosquatting</strong> (liυ.edu vs liu.edu, weird subdomains, extra dashes).</li>
+          <li><strong>Don’t sign in</strong> from a QR page—open the trusted site manually/bookmark.</li>
+          <li><strong>Use MFA</strong> and a password manager to limit damage if you slip.</li>
+          <li><strong>Report suspicious QR codes</strong> to organizers or campus IT.</li>
+        </ol>
+      </div>
+
+      <p><strong>Want to learn real defense skills?</strong></p>
+      <a class="cta" href="https://forms.gle/nohQET5UzDKfhnjY7" target="_blank" rel="noopener">
+        Join the LIU Cybersecurity Club
+      </a>
+
+      <footer>
+        © 2025 LIU Cybersecurity Club · Awareness Campaign · Monday, October 27 · 10:00–12:00
+      </footer>
+    </section>
   </main>
-
-  <script>
-    function reveal(){
-      const p1 = document.getElementById('page1');
-      const p2 = document.getElementById('page2');
-      p1.classList.add('hidden');
-      p2.classList.remove('hidden');
-    }
-  </script>
 </body>
 </html>
