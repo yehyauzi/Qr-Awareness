@@ -1,106 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0e0e0e" />
   <title>QR Awareness Campaign</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0e0e0e;
-      color: #eaeaea;
-      text-align: center;
-      padding: 50px 20px;
+    :root{
+      --bg:#0e0e0e; --card:#171717; --text:#eaeaea; --muted:#bdbdbd; --accent:#00ffcc;
+      --radius:16px; --shadow:0 6px 24px rgba(0,0,0,.35);
     }
-    .card {
-      background-color: #1b1b1b;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      max-width: 600px;
-      margin: 0 auto;
-      transition: all 0.3s ease-in-out;
+    /* Mobile-first layout */
+    html,body{height:100%; background:var(--bg); color:var(--text);}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display:flex; align-items:center; justify-content:center;
+      padding: max(20px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+      line-height:1.5;
     }
-    h1 {
-      color: #00ffcc;
-      font-size: 1.8em;
+    .wrap{
+      width:100%; max-width:520px;
     }
-    .meta {
-      margin-top: 8px;
-      font-size: 0.98em;
-      color: #bdbdbd;
+    .card{
+      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+      padding: clamp(20px, 5vw, 28px);
+      text-align:center;
     }
-    p {
-      font-size: 1.1em;
-      line-height: 1.6;
-      margin-top: 15px;
+    h1{
+      font-size: clamp(1.25rem, 4.5vw, 1.75rem);
+      margin:0 0 8px; color:var(--accent);
     }
-    .hidden { display: none; }
-    button {
-      background-color: #00ffcc;
-      color: #0e0e0e;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 25px;
-      font-size: 1em;
+    .meta{
+      color:var(--muted); font-size: clamp(.9rem, 3.5vw, 1rem); margin-bottom: 8px;
     }
-    button:hover { background-color: #00e6b8; }
-    a {
-      color: #00ffcc;
-      text-decoration: none;
-      font-weight: bold;
+    p{font-size: clamp(1rem, 3.8vw, 1.05rem); margin: 12px 0;}
+    .hidden{display:none;}
+    .btn{
+      display:block; width:100%;
+      margin-top:16px; padding:14px 18px;
+      border:0; border-radius:12px; font-weight:700; font-size:1rem;
+      background:var(--accent); color:#081a16;
+      touch-action:manipulation; cursor:pointer;
     }
-    a:hover { text-decoration: underline; }
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #888;
+    .btn:active{transform: scale(.995);}
+    a{color:var(--accent); text-decoration:none; font-weight:700;}
+    a:focus-visible, .btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+    footer{
+      margin-top:12px; text-align:center; color:var(--muted);
+      font-size: .92rem;
+    }
+
+    /* nice entrance without motion sickness */
+    .fade-in{opacity:0; transform: translateY(6px); animation:fade .35s ease forwards;}
+    @keyframes fade{to{opacity:1; transform:none;}}
+    @media (prefers-reduced-motion: reduce){
+      .fade-in{animation:none; opacity:1; transform:none;}
     }
   </style>
 </head>
 <body>
-  <div class="card" id="page1">
-    <h1>Loading Secure Page...</h1>
-    <div class="meta">Event: Monday, October 27, 10:00–12:00</div>
-    <p>Please wait while we verify your device’s authenticity.</p>
-    <button onclick="reveal()">Continue</button>
-  </div>
+  <main class="wrap">
+    <!-- Screen 1 -->
+    <section class="card fade-in" id="page1" aria-labelledby="t1">
+      <h1 id="t1">Loading Secure Page…</h1>
+      <div class="meta">Event: Monday, October 27 · 10:00–12:00</div>
+      <p>Please wait while we verify your device’s authenticity.</p>
+      <button class="btn" onclick="reveal()" aria-controls="page2" aria-expanded="false">
+        Continue
+      </button>
+    </section>
 
-  <div class="card hidden" id="page2">
-    <h1>⚠️ You’ve Just Been Quished!</h1>
-    <div class="meta">Cybersecurity Awareness Demo — Mon, Oct 27 · 10:00–12:00</div>
-    <p>
-      This QR code was part of the <strong>Cybersecurity Awareness Campaign</strong> by the LIU Cybersecurity Club.
-    </p>
-    <p>
-      Imagine if this page had been <strong>malicious</strong> — it could have:
-      <br>🔹 Stolen your credentials<br>
-      🔹 Installed malware<br>
-      🔹 Spoofed a trusted login page
-    </p>
-    <p>
-      <strong>Lesson:</strong> Always verify the URL before scanning a QR code.<br>
-      Stay alert. Stay secure. 🧠🔒
-    </p>
-    <p>
-      Want to learn more about cybersecurity?<br>
-      <a href="https://forms.gle/oU3hHJEYnskKFpbw7" target="_blank">
-        Join the LIU Cybersecurity Club
-      </a>
-    </p>
-  </div>
+    <!-- Screen 2 -->
+    <section class="card hidden fade-in" id="page2" aria-labelledby="t2">
+      <h1 id="t2">⚠️ You’ve Just Been Quished!</h1>
+      <div class="meta">Cybersecurity Awareness Demo — Mon, Oct 27 · 10:00–12:00</div>
+      <p>
+        This QR code is part of the <strong>LIU Cybersecurity Club</strong> awareness campaign.
+      </p>
+      <p>
+        If this were malicious, it could have:<br>
+        • Stolen your credentials<br>
+        • Installed malware<br>
+        • Spoofed a trusted login page
+      </p>
+      <p><strong>Tip:</strong> Always preview and verify the URL behind a QR before proceeding.</p>
+      <p>
+        Want more? <a href="https://forms.gle/your-registration-link-here" target="_blank" rel="noopener">
+        Join the LIU Cybersecurity Club</a>
+      </p>
+    </section>
 
-  <footer>
-    © 2025 LIU Cybersecurity Club — Awareness Week · Monday, October 27 · 10:00–12:00
-  </footer>
+    <footer>© 2025 LIU Cybersecurity Club · Monday, October 27 · 10:00–12:00</footer>
+  </main>
 
   <script>
-    function reveal() {
-      document.getElementById("page1").classList.add("hidden");
-      document.getElementById("page2").classList.remove("hidden");
+    function reveal(){
+      const p1 = document.getElementById('page1');
+      const p2 = document.getElementById('page2');
+      p1.classList.add('hidden');
+      p2.classList.remove('hidden');
     }
   </script>
 </body>
